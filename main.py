@@ -1,5 +1,6 @@
 import os
 import logging
+import discord
 from dotenv import load_dotenv
 from discord import Intents
 from discord.ext import commands
@@ -27,7 +28,7 @@ async def main():
 @bot.event
 async def on_ready():
     synced = await bot.tree.sync()
-    print(f"Bot is ready! Synced {len(synced)} commands.")
+    print(f"Bot is ready! Synced {len(synced)} global commands.")
 
 if __name__ == "__main__":
     import asyncio

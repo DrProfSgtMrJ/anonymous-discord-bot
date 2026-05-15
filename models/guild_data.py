@@ -12,8 +12,14 @@ class GuildData:
     def add_player(self, player: Player):
         self.players[player.discord_member_id] = player
 
+    def remove_player(self, discord_member_id: int) -> Player | None:
+        return self.players.pop(discord_member_id, None)
+
     def set_anonymous_channel_id(self, channel_id: int):
         self.anonymous_channel_id = channel_id
 
     def clear_anonymous_channel_id(self):
         self.anonymous_channel_id = None
+
+    def list_players(self) -> list[Player]:
+        return list(self.players.values())
