@@ -7,10 +7,13 @@ from .player import Player
 class GuildData:
     guild_id: int
     anonymous_channel_id: Optional[int] = None
-    players: list[Player] = field(default_factory=list)
+    players: dict[int, Player] = field(default_factory=dict)
 
     def add_player(self, player: Player):
-        self.players.append(player)
+        self.players[player.discord_member_id] = player
 
     def set_anonymous_channel_id(self, channel_id: int):
         self.anonymous_channel_id = channel_id
+
+    def clear_anonymous_channel_id(self):
+        self.anonymous_channel_id = None
