@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from dotenv import load_dotenv
 from discord import Intents
@@ -13,7 +14,22 @@ from migration import import_legacy_data
 
 load_dotenv()
 
-logger_handler = logging.FileHandler(filename='bot.log', encoding='utf-8', mode='w')
+# Setup logging to both file and stdout
+logger_handler_file = logging.FileHandler(filename='bot.log', encoding='utf-8', mode='w')
+logger_handler_stdout = logging.StreamHandler(sys.stdout)
+
+log_format = '%(asctime)s - %(levelname)s - %(message)s'
+formatter = logging.Formatter(log_format)
+
+logger_handler_file.setFormatter(formatter)
+logger_handler_stdout.setFormatter(formatter)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    handlers=[logger_handler_file, logger_handler_stdout],
+    format=log_format
+)
+
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN", "")
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:password@localhost:27017")
 MONGO_DB = os.getenv("MONGO_DB", "discord_bot")
@@ -72,9 +88,4 @@ async def on_shutdown():
 if __name__ == "__main__":
     import asyncio
 
-    logging.basicConfig(
-        level=logging.DEBUG,
-        handlers=[logger_handler],
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
     asyncio.run(main())
